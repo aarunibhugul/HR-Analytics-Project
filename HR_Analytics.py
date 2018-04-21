@@ -44,6 +44,10 @@ for col in turnover_dataFrame.columns:
 
 
 #----------------Data Visualisation-------------------#
+scatter_matrix(turnover_dataFrame, alpha=0.2, figsize=(6, 6), diagonal='kde')
+plt.savefig('scatter_matrix')
+
+
 
 pd.crosstab(turnover_dataFrame.Department,turnover_dataFrame.Attrition).plot(kind='bar')
 plt.title('Turnover Frequency for Department')
