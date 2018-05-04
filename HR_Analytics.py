@@ -2,6 +2,7 @@ import numpy as np # linear algebra
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix
@@ -122,6 +123,7 @@ target_variable = turnover_dataFrame["Attrition"].apply(lambda x: Numerical_enco
 ################################ Modelling #######################
 X = predictor_dataFrame
 y = target_variable
+
 
 ##-----------------Dividing the data into Train and test Split-----##
 from sklearn.cross_validation import train_test_split
@@ -246,18 +248,26 @@ plt.savefig('ROC')
 plt.show()
 
 
+###------Applying dimesionality Feature Selection/ Dimensionality reduction technique - Principal Component Analysis
+pca = PCA(n_components = 2)
+X_train = pca.fit_transform(X_train)
+X_test = pca.transform(X_test)
+explained_variance = pca.explained_variance_ratio_
+print(explained_variance)
+
 ###----------Feature Importance for Random Forest Model------###
 
-# feature_labels = np.array(predictor_dataFrame)
-# importance = random_forest_classifier.feature_importances_
-# feature_indexes_by_importance = importance.argsort()
-# print("RandomForestClassifier Importance")
-# for index in feature_indexes_by_importance:
-#     print('{}-{:.2f}%'.format(feature_labels[index], (importance[index] *100.0)))
-# ###----------Feature Importance for Logistic------###
-# feature_labels = np.array([predictor_dataFrame])
-# importance = logistic_classifier.feature_importances_
-# feature_indexes_by_importance = importance.argsort()
-# print("LogisticRegression Importance")
-# for index in feature_indexes_by_importance:
-#     print('{}-{:.2f}%'.format(feature_labels[index], (importance[index] *100.0)))
+feature_labels = np.array(predictor_dataFrame)
+importance = random_forest_classifier.feature_importances_
+feature_indexes_by_importance = importance.argsort()
+print("RandomForestClassifier Importance")
+for index in feature_indexes_by_importance:
+    print('{}-{:.2f}%'.format(feature_labels[index], (importance[index] *100.0)))
+
+###----------Feature Importance for Logistic------###
+feature_labels = np.array([predictor_dataFrame])
+importance = logistic_classifier.feature_importances_
+feature_indexes_by_importance = importance.argsort()
+print("LogisticRegression Importance")
+for index in feature_indexes_by_importance:
+    print('{}-{:.2f}%'.format(feature_labels[index], (importance[index] *100.0)))
